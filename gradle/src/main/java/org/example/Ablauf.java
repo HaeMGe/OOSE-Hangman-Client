@@ -57,7 +57,14 @@ public static void start() throws IOException {
 
     }
 
-    private static void poolBeitreten() {}
+    private static void poolBeitreten() throws IOException {
+        String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/poolSuchen/", "pools angefragt");
+        System.out.println(antwort);
+
+
+
+
+    }
 
     public static void raten() throws IOException {
      String eingabe = null;
