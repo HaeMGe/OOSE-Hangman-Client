@@ -53,14 +53,14 @@ public static void start() throws IOException {
             System.out.println("Ein Pool wurde erfolgreich angelegt.");
         }
         else System.out.println("Leider ist ein Fehler passiert. Probieren Sie eventuell eine andere ID aus.");
-
+        start();
 
     }
 
     private static void poolBeitreten() throws IOException {
         String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/poolSuchen/", "pools angefragt");
         System.out.println(antwort);
-
+        start();
 
 
 
