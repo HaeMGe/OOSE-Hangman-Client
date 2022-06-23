@@ -12,17 +12,17 @@ public static void start() throws IOException {
     String name = sc.next();
     Main.name = name;
 
-    System.out.println("Was möchten Sie tuen?");
-    System.out.println("1: Spielpool beitreten");
-    System.out.println("2: Spielpool anlegen");
-    System.out.println("3. Logout");
-    int option = sc.nextInt();
-    menue1(option);
+  menue1();
 
 
 }
 
-    private static void menue1(int option) throws IOException {
+    private static void menue1() throws IOException {
+        System.out.println("Was möchten Sie tuen?");
+        System.out.println("1: Spielpool beitreten");
+        System.out.println("2: Spielpool anlegen");
+        System.out.println("3. Logout");
+        int option = sc.nextInt();
     if(option == 1){
         poolBeitreten();
     }
@@ -60,6 +60,10 @@ public static void start() throws IOException {
     private static void poolBeitreten() throws IOException {
         String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/poolSuchen/", "pools angefragt");
         System.out.println(antwort);
+        System.out.println("Geben Sie die ID Ihres Wunschpools aus oder die -1 für das Hauptmenü");
+        int wunschId = sc.nextInt();
+        String antwortServer = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/beitreten/", "{ 'name': '"+ Main.name+ "','pool': '"+wunschId+"'}");  //neuen Postrequest mit Eingabe an S
+        System.out.println(antwortServer);
         start();
 
 
