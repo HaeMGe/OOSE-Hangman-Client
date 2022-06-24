@@ -1,5 +1,8 @@
 package org.example;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -11,7 +14,16 @@ public static void start() throws IOException {
     System.out.println("Name: ");   //sich mit Name einloggen/sich einen Spielernamen geben
     Main.name = sc.next();
     String antwortServer = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/neuerNutzer", "{ 'name': '"+ Main.name+"'}"); //Namen für Nutzerliste an Server schicken
-    System.out.println(antwortServer);
+
+    JsonObject jObj = new Gson().fromJson(antwortServer, JsonObject.class);
+    String text = jObj.get("text").toString();
+    text = text.replace("\"", "");
+
+    if(text.equals("Herzlich Willkommen vom Server!")){
+        System.out.println("---Mit dem Server verbunden---");
+    }else {
+        System.err.println("----Fehler beim verbinden----");
+    }
     menue1();
 }
 
@@ -34,6 +46,7 @@ public static void start() throws IOException {
 
     //logout
     private static void logout() throws IOException {
+    Main.name = "";
         start();
     }
 
@@ -49,7 +62,7 @@ public static void start() throws IOException {
 
         if(antwort2){
             System.out.println("Ein Pool wurde erfolgreich angelegt.");
-            menue1();
+            //menue1();
         }
         else System.out.println("Leider ist ein Fehler passiert. Probieren Sie eventuell eine andere ID aus.");
         menue1();
