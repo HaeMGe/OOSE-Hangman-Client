@@ -58,14 +58,29 @@ public static void start() throws IOException {
 
     private static void poolBeitreten() throws IOException {
         String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/poolSuchen/", "pools angefragt");
-        System.out.println(antwort);
-        System.out.println("Geben Sie die ID Ihres Wunschpools aus oder die -1 für das Hauptmenü");
+        String[] antwortSplit = antwort.split("Vorhanden: ");
+        if(antwortSplit[1].contains("true"))  {
+            System.out.println("Leider kein Spielpool vorhanden. Sie könnten selbst einen erstellen...");
+        }
+        else {
+            String[] liste = antwortSplit[0].split("ID: ");
+
+            for(int i = 1; i < liste.length; i++) {
+                System.out.print(i + ". ID: ");
+                System.out.println(liste[i]);
+            }
+        System.out.println("Geben Sie die ID Ihres Wunschpools ein oder die -1 für das Hauptmenü");
         int wunschId = sc.nextInt();
         if(wunschId == -1){  //zurück zu Menü
             menue1();
         }
-        String antwortServer = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/beitreten/", "{ 'name': '"+ Main.name+ "','pool': '"+wunschId+"'}");  //neuen Postrequest mit Eingabe an S
-        System.out.println(antwortServer);
+        else {
+            String antwortServer = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/beitreten/", "{ 'name': '" + Main.name + "','pool': '" + wunschId + "'}");  //neuen Postrequest mit Eingabe an S
+            System.out.println(antwortServer);
+        }
+
+
+        }
         menue1();
 
     }
