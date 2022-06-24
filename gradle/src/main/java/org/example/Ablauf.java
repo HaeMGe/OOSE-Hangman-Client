@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class Ablauf {
     static Scanner sc = new Scanner(System.in);
@@ -69,7 +70,7 @@ public static void start() throws IOException {
 
     }
 
-    private static void poolBeitreten() throws IOException {
+    private static void poolBeitreten() throws IOException, InterruptedException {
         String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/poolSuchen/", "pools angefragt");
         String[] antwortSplit = antwort.split("Vorhanden: ");
         if(antwortSplit[1].contains("true"))  {
@@ -91,6 +92,8 @@ public static void start() throws IOException {
             String antwortServer = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/beitreten/", "{ 'name': '" + Main.name + "','pool': '" + wunschId + "'}");  //neuen Postrequest mit Eingabe an S
             if(antwortServer.contains("true")){
                 System.out.println("Sie sind dem Pool erfolgreich beigetreten");
+                Main.poolID = wunschId;
+                poolWarteRaum();
             }
             else {
                 System.out.println("Leider gab es Probleme beim Beitreten. Sind Sie eventuell bereits Mitglied in diesem Pool?");
@@ -98,8 +101,44 @@ public static void start() throws IOException {
             }
         }
         menue1();
+    }
+
+
+    public static void poolWarteRaum() throws InterruptedException, IOException {
+
+        boolean spielGestartet = false;
+        int sekunden = 0;
+        String text = "";
+
+        System.out.println("---Warte auf zweiten Spieler---");
+        while(!spielGestartet){
+            TimeUnit.SECONDS.sleep(1);
+            sekunden = sekunden+1;
+
+            String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/pool/warteRaum", "{ 'poolID':"+Main.poolID+" }");
+            spielGestartet = Boolean.parseBoolean(antwort);
+
+            if(sekunden%3==0){
+                text = text+"*";
+                System.out.println(text);
+            }
+            if(sekunden%15==0){
+                text =  "";
+            }
+        }
+
+        if(spielGestartet){
+            spiel();
+        }else {
+            System.err.println("Fehler im WarteRaum");
+        }
 
     }
+
+    public static void spiel(){
+
+    }
+
 
     public static void raten() throws IOException {
      String eingabe = null;
