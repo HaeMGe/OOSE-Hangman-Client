@@ -76,10 +76,13 @@ public static void start() throws IOException {
         }
         else {
             String antwortServer = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/beitreten/", "{ 'name': '" + Main.name + "','pool': '" + wunschId + "'}");  //neuen Postrequest mit Eingabe an S
-            System.out.println(antwortServer);
-        }
-
-
+            if(antwortServer.contains("true")){
+                System.out.println("Sie sind dem Pool erfolgreich beigetreten");
+            }
+            else {
+                System.out.println("Leider gab es Probleme beim Beitreten. Sind Sie eventuell bereits Mitglied in diesem Pool?");
+                }
+            }
         }
         menue1();
 
