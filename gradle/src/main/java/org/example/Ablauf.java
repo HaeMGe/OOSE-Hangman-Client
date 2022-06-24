@@ -8,13 +8,11 @@ public class Ablauf {
 
 
 public static void start() throws IOException {
-    System.out.println("Name: ");
-    String name = sc.next();
-    Main.name = name;
-
-  menue1();
-
-
+    System.out.println("Name: ");   //sich mit Name einloggen/sich einen Spielernamen geben
+    Main.name = sc.next();
+    String antwortServer = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/neuerNutzer", "{ 'name': '"+ Main.name+"'}"); //Namen für Nutzerliste an Server schicken
+    System.out.println(antwortServer);
+    menue1();
 }
 
     private static void menue1() throws IOException {
@@ -51,9 +49,10 @@ public static void start() throws IOException {
 
         if(antwort2){
             System.out.println("Ein Pool wurde erfolgreich angelegt.");
+            menue1();
         }
         else System.out.println("Leider ist ein Fehler passiert. Probieren Sie eventuell eine andere ID aus.");
-        start();
+        menue1();
 
     }
 
@@ -62,11 +61,12 @@ public static void start() throws IOException {
         System.out.println(antwort);
         System.out.println("Geben Sie die ID Ihres Wunschpools aus oder die -1 für das Hauptmenü");
         int wunschId = sc.nextInt();
+        if(wunschId == -1){  //zurück zu Menü
+            menue1();
+        }
         String antwortServer = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/beitreten/", "{ 'name': '"+ Main.name+ "','pool': '"+wunschId+"'}");  //neuen Postrequest mit Eingabe an S
         System.out.println(antwortServer);
-        start();
-
-
+        menue1();
 
     }
 

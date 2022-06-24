@@ -15,7 +15,6 @@ public class Main {
 
     String wort;
     public static void main(String[] args) throws IOException {
-        System.out.println("Hello world!");
         String antwort = posten.doPostRequest("http://localhost:4567/games/hangman/start" , "Hallo vom Client!");
         System.out.println(antwort);
         Ablauf.start();
@@ -23,20 +22,5 @@ public class Main {
 
 
     }
-
-
-  /**  public void setWort() throws IOException {
-        System.out.println("Ihr Wort:");
-        this.wort = sc.next();
-        String antwort = posten.doPostRequest("http://localhost:4567/games/hangman/start/neuesWort", "{ "+ wort + " }");
-
-    }
-   */
-  /**  public void getWort() throws IOException {
-        String raetsel = getter.run("http://localhost:4567/games/hangman/start/loesen");
-        System.out.println(raetsel.length());
-    }
-   */
-
 
 }
