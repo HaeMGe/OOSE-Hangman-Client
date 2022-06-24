@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -11,7 +12,7 @@ public class Ablauf {
     static Scanner sc = new Scanner(System.in);
 
 
-public static void start() throws IOException {
+public static void start() throws IOException, InterruptedException {
     System.out.println("Name: ");   //sich mit Name einloggen/sich einen Spielernamen geben
     Main.name = sc.next();
     String antwortServer = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/neuerNutzer", "{ 'name': '"+ Main.name+"'}"); //Namen für Nutzerliste an Server schicken
@@ -28,7 +29,7 @@ public static void start() throws IOException {
     menue1();
 }
 
-    private static void menue1() throws IOException {
+    private static void menue1() throws IOException, InterruptedException {
         System.out.println("Was möchten Sie tuen?");
         System.out.println("1: Spielpool beitreten");
         System.out.println("2: Spielpool anlegen");
@@ -46,13 +47,13 @@ public static void start() throws IOException {
     }
 
     //logout
-    private static void logout() throws IOException {
+    private static void logout() throws IOException, InterruptedException {
     Main.name = "";
         start();
     }
 
     //neuen Pool anlegen
-    private static void poolAnlegen() throws IOException {
+    private static void poolAnlegen() throws IOException, InterruptedException {
         System.out.println("Welchen Schwierigkeitsgrad soll der Pool haben?");
         int level = sc.nextInt();
         System.out.println("Was soll die Pool-ID sein?");
@@ -135,8 +136,16 @@ public static void start() throws IOException {
 
     }
 
-    public static void spiel(){
+    public static void spiel() throws IOException {
 
+        String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/spiel/anfang", "{ 'poolID':"+Main.poolID+",''name':'"+Main.name+"' }");
+
+    //je nach antwort des servers, entweder raten etc, oder warten bis man dran ist durch statusabfragen --> polling()
+
+    }
+
+    public static void polling() throws IOException {
+        String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/spiel/status", "{ 'poolID':"+Main.poolID+",''name':'"+Main.name+"' }");
     }
 
 
