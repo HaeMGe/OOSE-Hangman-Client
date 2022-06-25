@@ -16,7 +16,15 @@ public static void start() throws IOException, InterruptedException {
     System.out.println("Name: ");   //sich mit Name einloggen/sich einen Spielernamen geben
     Main.name = sc.next();
     String antwortServer = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/neuerNutzer", "{ 'name': '"+ Main.name+"'}"); //Namen für Nutzerliste an Server schicken
-
+    if(antwortServer.contains("true")){
+        System.out.println("Anmeldung erfolgreich. Viel Spass beim Spielen!");
+        menue1();
+    }
+    else {
+        System.out.println("Anmeldung gescheitert. Es ist im Moment bereits ein Nutzer mit diesem Namen registriert.");
+        start();
+    }
+   /** System.out.println(antwortServer);
     JsonObject jObj = new Gson().fromJson(antwortServer, JsonObject.class);
     String text = jObj.get("text").toString();
     text = text.replace("\"", "");
@@ -27,6 +35,7 @@ public static void start() throws IOException, InterruptedException {
         System.err.println("----Fehler beim verbinden----");
     }
     menue1();
+    */
 }
 
     private static void menue1() throws IOException, InterruptedException {
