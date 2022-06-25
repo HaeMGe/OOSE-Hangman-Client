@@ -187,7 +187,7 @@ public static void start() throws IOException, InterruptedException {
 
             if(amZug){
                 raten();
-                amZug = false
+                amZug = false;
             }else{
 
                 //TODO: antwort muss noch sinnvoll benutzt werden
