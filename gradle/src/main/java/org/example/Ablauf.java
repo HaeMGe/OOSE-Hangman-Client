@@ -87,6 +87,7 @@ public static void start() throws IOException, InterruptedException {
 
         if(antwort2){
             System.out.println("Ein Pool wurde erfolgreich angelegt.");
+            Main.poolID = id;
             poolWarteRaum();
         }
         else System.out.println("Leider ist ein Fehler passiert. Probieren Sie eventuell eine andere ID aus.");
@@ -128,7 +129,11 @@ public static void start() throws IOException, InterruptedException {
         }
     }
 
-
+    /**
+     * Methode, in der der Client bleibt, bis ein Gegner seinem Pool beitritt (oder er irgendwann rausgeworfen wird??)
+     * @throws InterruptedException
+     * @throws IOException
+     */
     public static void poolWarteRaum() throws InterruptedException, IOException {
 
         boolean spielGestartet = false;
@@ -136,6 +141,7 @@ public static void start() throws IOException, InterruptedException {
         String text = "";
 
         System.out.println("---Warte auf zweiten Spieler---");
+        //Prüft jede Sekunde, ob ein Gegner dem Pool beigetreten ist, und das Spiel begonnen hat
         while(!spielGestartet){
             TimeUnit.SECONDS.sleep(1);
             sekunden = sekunden+1;
@@ -144,13 +150,12 @@ public static void start() throws IOException, InterruptedException {
             antwort = antwort.replace("{", "");
             antwort = antwort.replace("}", "");
 
+            //Boolean vom Server, welches angibt ob das Spiel gestartet ist oder nicht
             spielGestartet = Boolean.parseBoolean(antwort);
-            System.out.println(spielGestartet);
 
-
+            //Kleine Warteanimation :D
             text = text+"*";
             System.out.print(text+" \r");
-
             if(sekunden%15==0){
                 text =  "";
             }
@@ -162,6 +167,7 @@ public static void start() throws IOException, InterruptedException {
     }
 
     public static void spiel() throws IOException {
+        System.err.println("---Spiel gestartet---");
 
         String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/spiel/anfang", "{ 'poolID':"+Main.poolID+",''name':'"+Main.name+"' }");
 
