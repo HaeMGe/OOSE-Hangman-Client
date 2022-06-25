@@ -174,6 +174,7 @@ public static void start() throws IOException, InterruptedException {
         String text = "Warten auf Gegner ";
         int sekunden = 0;
 
+        //Anfrage, wer der Clients anfangen darf zu raten
         String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/spiel/anfang", "{ 'poolID':"+Main.poolID+",''name':'"+Main.name+"' }");
         System.out.println(antwort);
 
@@ -190,7 +191,7 @@ public static void start() throws IOException, InterruptedException {
                 amZug = false;
             }else{
 
-                //TODO: antwort muss noch sinnvoll benutzt werden
+                //TODO: antwort muss noch sinnvoll benutzt werden --> amZug muss geupdated werden, spielEnde auch, und es müssen Anzahl leben und geratene Buchstaben etc
                 antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/spiel/status", "{ 'poolID':"+Main.poolID+",''name':'"+Main.name+"' }");
 
                 text = text+"*";
