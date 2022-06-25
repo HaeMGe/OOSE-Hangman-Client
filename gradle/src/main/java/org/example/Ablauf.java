@@ -26,10 +26,10 @@ public static void start() throws IOException, InterruptedException {
     }
    /** System.out.println(antwortServer);
     JsonObject jObj = new Gson().fromJson(antwortServer, JsonObject.class);
-    String text = jObj.get("text").toString();
+    String text = jObj.get("neuerNutzer").toString();
     text = text.replace("\"", "");
 
-    if(text.equals("Herzlich Willkommen vom Server!")){
+    if(text.equals("true")){
         System.out.println("---Mit dem Server verbunden---");
     }else {
         System.err.println("----Fehler beim verbinden----");
@@ -87,7 +87,7 @@ public static void start() throws IOException, InterruptedException {
 
         if(antwort2){
             System.out.println("Ein Pool wurde erfolgreich angelegt.");
-            //menue1();
+            poolWarteRaum();
         }
         else System.out.println("Leider ist ein Fehler passiert. Probieren Sie eventuell eine andere ID aus.");
         menue1();
@@ -99,6 +99,7 @@ public static void start() throws IOException, InterruptedException {
         String[] antwortSplit = antwort.split("Vorhanden: ");
         if(antwortSplit[1].contains("true"))  {
             System.out.println("Leider kein Spielpool vorhanden. Sie könnten selbst einen erstellen...");
+            menue1();
         }
         else {
             String[] liste = antwortSplit[0].split("ID: ");
@@ -121,10 +122,10 @@ public static void start() throws IOException, InterruptedException {
             }
             else {
                 System.out.println("Leider gab es Probleme beim Beitreten. Sind Sie eventuell bereits Mitglied in diesem Pool?");
+                menue1();
                 }
             }
         }
-        menue1();
     }
 
 
@@ -146,10 +147,10 @@ public static void start() throws IOException, InterruptedException {
             spielGestartet = Boolean.parseBoolean(antwort);
             System.out.println(spielGestartet);
 
-            if(sekunden%3==0){
-                text = text+"*";
-                System.out.println(text);
-            }
+
+            text = text+"*";
+            System.out.print(text+" \r");
+
             if(sekunden%15==0){
                 text =  "";
             }

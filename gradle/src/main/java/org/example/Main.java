@@ -15,7 +15,9 @@ public class Main {
 
     String wort;
     public static void main(String[] args) throws IOException, InterruptedException {
-        String antwort = posten.doPostRequest("http://localhost:4567/games/hangman/start" , "Hallo vom Client!");
+
+        String antwort = posten.doPostRequest("http://localhost:4567/games/hangman/start", "Hallo vom Client!");
+
         System.out.println(antwort);
         Ablauf.start();
 
