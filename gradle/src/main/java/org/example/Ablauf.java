@@ -43,6 +43,7 @@ public static void start() throws IOException, InterruptedException {
         System.out.println("1: Spielpool beitreten");
         System.out.println("2: Spielpool anlegen");
         System.out.println("3. Logout");
+        System.out.println("4. Pools, denen ich angehoere");
         int option = sc.nextInt();
     if(option == 1){
         poolBeitreten();
@@ -53,6 +54,9 @@ public static void start() throws IOException, InterruptedException {
     if(option == 3){
         logout();
     }
+    if(option == 4){
+        meinePools();
+    }
     }
 
     //logout
@@ -61,6 +65,12 @@ public static void start() throws IOException, InterruptedException {
         start();
     }
 
+    public static void meinePools() throws IOException, InterruptedException {
+        String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/meinePools/", "{ 'name': '"+ Main.name+ "'}");  //neuen Postrequest mit Eingabe an Server
+        System.out.println(antwort);
+        menue1();
+
+    }
     //neuen Pool anlegen
     private static void poolAnlegen() throws IOException, InterruptedException {
         System.out.println("Sie haben die Wahl, wechen Schwierigkeitsgrad der Pool haben soll: ");
