@@ -63,7 +63,11 @@ public static void start() throws IOException, InterruptedException {
 
     //neuen Pool anlegen
     private static void poolAnlegen() throws IOException, InterruptedException {
-        System.out.println("Welchen Schwierigkeitsgrad soll der Pool haben?");
+        System.out.println("Sie haben die Wahl, wechen Schwierigkeitsgrad der Pool haben soll: ");
+        System.out.println("1: Anfänger");
+        System.out.println("2: Clevere");
+        System.out.println("3: Profis");
+        System.out.println("4: Absolute Überflieger");
         int level = sc.nextInt();
         System.out.println("Was soll die Pool-ID sein?");
         int id = sc.nextInt();
@@ -126,7 +130,11 @@ public static void start() throws IOException, InterruptedException {
             sekunden = sekunden+1;
 
             String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/pool/warteRaum", "{ 'poolID':"+Main.poolID+" }");
+            antwort = antwort.replace("{", "");
+            antwort = antwort.replace("}", "");
+
             spielGestartet = Boolean.parseBoolean(antwort);
+            System.out.println(spielGestartet);
 
             if(sekunden%3==0){
                 text = text+"*";
@@ -137,11 +145,8 @@ public static void start() throws IOException, InterruptedException {
             }
         }
 
-        if(spielGestartet){
+        //hier wurde das Spiel gestartet
             spiel();
-        }else {
-            System.err.println("Fehler im WarteRaum");
-        }
 
     }
 
