@@ -153,10 +153,19 @@ public static void start() throws IOException, InterruptedException {
      String eingabe = null;
      System.out.println("Bitte geben Sie die 0 ein, wenn Sie einen Buchstaben erraten möchten und eine 1, wenn Sie schon ein ganzes Wort probieren wollen.");
      int option = sc.nextInt();
-     if(option == 0){
-         System.out.println("Welchen Buchstaben möchsten Sie ausprobieren?");
-         eingabe = sc.next();
-     }
+     if (option == 0) {
+         boolean x = true;
+         while (x == true) {  // Falls Eingabe ungültig, wird Eingabe wiederholt
+             System.out.println("Welchen Buchstaben wollen Sie ausprobieren?");
+             eingabe = sc.next();
+             char C = eingabe.charAt(0);
+             if (!((C >= 'a' && C <= 'z') || (C >= 'A' && C <= 'Z'))) {   //überprüft,ob Eingabe gültig ist
+                    System.out.println("Eingabe nicht korrekt. Bitte geben Sie einen Buchstaben ein!");
+             } else {
+                 x = false;
+             }
+            }
+        }
      if (option == 1){
          System.out.println("Welches Wort wollen Sie ausprobieren?");
          eingabe = sc.next();
