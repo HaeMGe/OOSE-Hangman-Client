@@ -1,21 +1,35 @@
 package org.example;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import java.io.IOException;
+import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class Ablauf {
     static Scanner sc = new Scanner(System.in);
 
 
-public static void start() throws IOException {
+public static void start() throws IOException, InterruptedException {
     System.out.println("Name: ");   //sich mit Name einloggen/sich einen Spielernamen geben
     Main.name = sc.next();
     String antwortServer = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/neuerNutzer", "{ 'name': '"+ Main.name+"'}"); //Namen für Nutzerliste an Server schicken
-    System.out.println(antwortServer);
+
+    JsonObject jObj = new Gson().fromJson(antwortServer, JsonObject.class);
+    String text = jObj.get("text").toString();
+    text = text.replace("\"", "");
+
+    if(text.equals("Herzlich Willkommen vom Server!")){
+        System.out.println("---Mit dem Server verbunden---");
+    }else {
+        System.err.println("----Fehler beim verbinden----");
+    }
     menue1();
 }
 
-    private static void menue1() throws IOException {
+    private static void menue1() throws IOException, InterruptedException {
         System.out.println("Was möchten Sie tuen?");
         System.out.println("1: Spielpool beitreten");
         System.out.println("2: Spielpool anlegen");
@@ -33,12 +47,13 @@ public static void start() throws IOException {
     }
 
     //logout
-    private static void logout() throws IOException {
+    private static void logout() throws IOException, InterruptedException {
+    Main.name = "";
         start();
     }
 
     //neuen Pool anlegen
-    private static void poolAnlegen() throws IOException {
+    private static void poolAnlegen() throws IOException, InterruptedException {
         System.out.println("Welchen Schwierigkeitsgrad soll der Pool haben?");
         int level = sc.nextInt();
         System.out.println("Was soll die Pool-ID sein?");
@@ -49,14 +64,14 @@ public static void start() throws IOException {
 
         if(antwort2){
             System.out.println("Ein Pool wurde erfolgreich angelegt.");
-            menue1();
+            //menue1();
         }
         else System.out.println("Leider ist ein Fehler passiert. Probieren Sie eventuell eine andere ID aus.");
         menue1();
 
     }
 
-    private static void poolBeitreten() throws IOException {
+    private static void poolBeitreten() throws IOException, InterruptedException {
         String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/poolSuchen/", "pools angefragt");
         String[] antwortSplit = antwort.split("Vorhanden: ");
         if(antwortSplit[1].contains("true"))  {
@@ -78,6 +93,8 @@ public static void start() throws IOException {
             String antwortServer = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/beitreten/", "{ 'name': '" + Main.name + "','pool': '" + wunschId + "'}");  //neuen Postrequest mit Eingabe an S
             if(antwortServer.contains("true")){
                 System.out.println("Sie sind dem Pool erfolgreich beigetreten");
+                Main.poolID = wunschId;
+                poolWarteRaum();
             }
             else {
                 System.out.println("Leider gab es Probleme beim Beitreten. Sind Sie eventuell bereits Mitglied in diesem Pool?");
@@ -85,21 +102,85 @@ public static void start() throws IOException {
             }
         }
         menue1();
+    }
+
+
+    public static void poolWarteRaum() throws InterruptedException, IOException {
+
+        boolean spielGestartet = false;
+        int sekunden = 0;
+        String text = "";
+
+        System.out.println("---Warte auf zweiten Spieler---");
+        while(!spielGestartet){
+            TimeUnit.SECONDS.sleep(1);
+            sekunden = sekunden+1;
+
+            String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/pool/warteRaum", "{ 'poolID':"+Main.poolID+" }");
+            spielGestartet = Boolean.parseBoolean(antwort);
+
+            if(sekunden%3==0){
+                text = text+"*";
+                System.out.println(text);
+            }
+            if(sekunden%15==0){
+                text =  "";
+            }
+        }
+
+        if(spielGestartet){
+            spiel();
+        }else {
+            System.err.println("Fehler im WarteRaum");
+        }
 
     }
 
+    public static void spiel() throws IOException {
+
+        String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/spiel/anfang", "{ 'poolID':"+Main.poolID+",''name':'"+Main.name+"' }");
+
+    //je nach antwort des servers, entweder raten etc, oder warten bis man dran ist durch statusabfragen --> polling()
+
+    }
+
+    public static void polling() throws IOException {
+        String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/spiel/status", "{ 'poolID':"+Main.poolID+",''name':'"+Main.name+"' }");
+    }
+
+
     public static void raten() throws IOException {
-     String eingabe = null;
-     System.out.println("Bitte geben Sie die 0 ein, wenn Sie einen Buchstaben erraten möchten und eine 1, wenn Sie schon ein ganzes Wort probieren wollen.");
-     int option = sc.nextInt();
-     if(option == 0){
-         System.out.println("Welchen Buchstaben möchsten Sie ausprobieren?");
-         eingabe = sc.next();
-     }
-     if (option == 1){
-         System.out.println("Welches Wort wollen Sie ausprobieren?");
-         eingabe = sc.next();
-     }
+        String eingabe = null;
+        System.out.println("Bitte geben Sie die 0 ein, wenn Sie einen Buchstaben erraten möchten und eine 1, wenn Sie schon ein ganzes Wort probieren wollen.");
+        int option = sc.nextInt();
+        if (option == 0) {
+            boolean x = true;
+            while (x == true) {  // Falls Eingabe ungültig, wird Eingabe wiederholt
+                System.out.println("Welchen Buchstaben wollen Sie ausprobieren?");
+                eingabe = sc.next();
+                char C = eingabe.charAt(0);
+                if (!((C >= 'a' && C <= 'z') || (C >= 'A' && C <= 'Z'))) {   //überprüft,ob Eingabe gültig ist
+                    System.out.println("Eingabe nicht korrekt. Bitte geben Sie einen Buchstaben ein!");
+                } else {
+                    x = false;
+                }
+            }
+        }
+        if (option == 1) {
+            boolean x = false;
+            while (x == false) {
+                System.out.println("Welches Wort wollen Sie ausprobieren?");
+                eingabe = sc.next();
+
+                x = eingabe.matches("[a-zA-Z]+");  //Überprüft, ob Wort nur Buchstaben enthält
+
+                if (x == false) {
+                    System.out.println("Bitte nochmal eingeben. Das Wort darf nur Buchstaben enthalten");  //Wenn Wort nicht nur Buchstaben enthält, wird Eingabe wiederholt
+                } else {
+                }
+            }
+        }
+
 
      String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/neuesWort/"+ option, "{ 'name': '"+ Main.name+ "','pool': '"+Main.poolID+"','zeichen': '"+eingabe+"'}");  //neuen Postrequest mit Eingabe an Server
      antwort.replace("{", "");
