@@ -166,17 +166,40 @@ public static void start() throws IOException, InterruptedException {
 
     }
 
-    public static void spiel() throws IOException {
+    public static void spiel() throws IOException, InterruptedException {
         System.err.println("---Spiel gestartet---");
 
+        boolean spielEnde = false;
+        boolean amZug = false;
+        String text = "Warten auf Gegner ";
+        int sekunden = 0;
+
         String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/spiel/anfang", "{ 'poolID':"+Main.poolID+",''name':'"+Main.name+"' }");
+        System.out.println(antwort);
 
-    //je nach antwort des servers, entweder raten etc, oder warten bis man dran ist durch statusabfragen --> polling()
+        if (antwort.contains("true")) {
+            amZug = true;
+        }
 
-    }
+        while(!spielEnde) {
+            TimeUnit.SECONDS.sleep(1);
+            sekunden = sekunden+1;
 
-    public static void polling() throws IOException {
-        String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/spiel/status", "{ 'poolID':"+Main.poolID+",''name':'"+Main.name+"' }");
+            if(amZug){
+                raten();
+                amZug = false
+            }else{
+
+                //TODO: antwort muss noch sinnvoll benutzt werden
+                antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/spiel/status", "{ 'poolID':"+Main.poolID+",''name':'"+Main.name+"' }");
+
+                text = text+"*";
+                System.out.print(text+" \r");
+                if(sekunden%15==0){
+                    text =  "Warten auf Gegner ";
+                }
+            }
+        }
     }
 
 
