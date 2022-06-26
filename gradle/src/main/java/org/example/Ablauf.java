@@ -171,8 +171,11 @@ public static void start() throws IOException, InterruptedException {
 
         boolean spielEnde = false;
         boolean amZug = false;
+        int anzahlLeben ;
         String text = "Warten auf Gegner ";
         int sekunden = 0;
+        String erraten = "";
+        String fehlversuche = "";
 
         //Anfrage, wer der Clients anfangen darf zu raten
         String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/spiel/anfang", "{ 'poolID':"+Main.poolID+",''name':'"+Main.name+"' }");
@@ -191,8 +194,31 @@ public static void start() throws IOException, InterruptedException {
                 amZug = false;
             }else{
 
-                //TODO: antwort muss noch sinnvoll benutzt werden --> amZug muss geupdated werden, spielEnde auch, und es müssen Anzahl leben und geratene Buchstaben etc
                 antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/spiel/status", "{ 'poolID':"+Main.poolID+",''name':'"+Main.name+"' }");
+
+                JsonObject jObj = new Gson().fromJson(antwort, JsonObject.class);
+                String amZugString = jObj.get("amZug").toString();
+                amZugString = amZugString.replace("\"", "");
+
+                amZug = Boolean.parseBoolean(amZugString);
+
+                String leben = jObj.get("leben").toString();
+                leben = leben.replace("\"", "");
+
+                anzahlLeben = Integer.parseInt(leben);
+
+                String spielVorbei = jObj.get("spielVorbei").toString();
+                spielVorbei = spielVorbei.replace("\"", "");
+
+                spielEnde = Boolean.parseBoolean(spielVorbei);
+
+                erraten = jObj.get("erraten").toString();
+                erraten = erraten.replace("\"", "");
+
+                fehlversuche = jObj.get("fehlversuche").toString();
+                fehlversuche = fehlversuche.replace("\"", "");
+
+
 
                 text = text+"*";
                 System.out.print(text+" \r");
@@ -208,6 +234,7 @@ public static void start() throws IOException, InterruptedException {
         String eingabe = null;
         System.out.println("Bitte geben Sie die 0 ein, wenn Sie einen Buchstaben erraten möchten und eine 1, wenn Sie schon ein ganzes Wort probieren wollen.");
         int option = sc.nextInt();
+
         if (option == 0) {
             boolean x = true;
             while (x == true) {  // Falls Eingabe ungültig, wird Eingabe wiederholt
@@ -237,18 +264,18 @@ public static void start() throws IOException, InterruptedException {
         }
 
 
-     String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/neuesWort/"+ option, "{ 'name': '"+ Main.name+ "','pool': '"+Main.poolID+"','zeichen': '"+eingabe+"'}");  //neuen Postrequest mit Eingabe an Server
-     antwort.replace("{", "");
-     antwort.replace("}", "");
-     boolean antwort2 = Boolean.parseBoolean(antwort);
-     System.out.println(antwort);
-     System.out.println(antwort2);
-     if(antwort2){
-         System.out.println("Richtig geraten!");
-     }
-     else System.out.println("Leider falscher Buchstabe! :-(");
+        String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/neuesWort/"+ option, "{ 'name': '"+ Main.name+ "','pool': '"+Main.poolID+"','zeichen': '"+eingabe+"'}");  //neuen Postrequest mit Eingabe an Server
+        antwort.replace("{", "");
+        antwort.replace("}", "");
+         boolean antwort2 = Boolean.parseBoolean(antwort);
+        System.out.println(antwort);
+        System.out.println(antwort2);
+        if(antwort2){
+            System.out.println("Richtig geraten!");
+        }
+        else System.out.println("Leider falscher Buchstabe! :-(");
 
 
- }
- }
+        }
+    }
 
