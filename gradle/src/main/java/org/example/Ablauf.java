@@ -208,7 +208,6 @@ public class Ablauf {
 
         //Anfrage, wer der Clients anfangen darf zu raten
         String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/spiel/anfang", "{ 'poolID':"+Main.poolID+",''name':'"+Main.name+"' }");
-        System.out.println(antwort);
 
         if (antwort.contains("true")) {  //dieser Nutzer ist dran mit Raten
             amZug = true;
@@ -227,7 +226,6 @@ public class Ablauf {
             }else{
 
                 antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/spiel/status", "{ 'poolID':'"+Main.poolID+"','name':'"+Main.name+"' }");
-                System.out.println(antwort);
                 JsonObject jObj = new Gson().fromJson(antwort, JsonObject.class);
                 String amZugString = jObj.get("amZug").toString();
                 amZugString = amZugString.replace("\"", "");
@@ -264,9 +262,8 @@ public class Ablauf {
 
     /**
      * Der Nutzer macht einen Rateversuch. Er hat die Auswahl zwischen Wort und Buchstabe erraten.
-     * @throws IOException
      */
-    public static void raten() throws IOException {
+    public static void raten(){
         String eingabe = null;
         System.out.println("Bitte geben Sie die 0 ein, wenn Sie einen Buchstaben erraten möchten und eine 1, wenn Sie schon ein ganzes Wort probieren wollen.");
         try {
