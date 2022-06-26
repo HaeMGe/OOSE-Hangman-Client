@@ -171,7 +171,7 @@ public static void start() throws IOException, InterruptedException {
 
         boolean spielEnde = false;
         boolean amZug = false;
-        int anzahlLeben ;
+        int anzahlLeben = 10;
         String text = "Warten auf Gegner ";
         int sekunden = 0;
         String erraten = "";
@@ -190,6 +190,9 @@ public static void start() throws IOException, InterruptedException {
             sekunden = sekunden+1;
 
             if(amZug){
+                System.out.println("Anzahl Leben: "+anzahlLeben);
+                System.out.println("Fehlversuche: "+fehlversuche);
+                System.out.println("Erratene Stellen: "+erraten);
                 raten();
                 amZug = false;
             }else{
