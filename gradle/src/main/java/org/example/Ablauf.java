@@ -197,7 +197,7 @@ public static void start() throws IOException, InterruptedException {
                 amZug = false;
             }else{
 
-                antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/spiel/status", "{ 'poolID':"+Main.poolID+",''name':'"+Main.name+"' }");
+                antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/spiel/status", "{ 'poolID':'"+Main.poolID+"','name':'"+Main.name+"' }");
 
                 JsonObject jObj = new Gson().fromJson(antwort, JsonObject.class);
                 String amZugString = jObj.get("amZug").toString();
