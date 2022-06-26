@@ -272,6 +272,10 @@ public class Ablauf {
         try {
             int option = sc.nextInt();
 
+            if(option >1 || option < 0) {
+                System.out.println("Nur Option 1 oder 2 sind gueltige Eingaben!");
+                raten();
+            }
             if (option == 0) {
                 boolean x = true;
                 while (x) {  // Falls Eingabe ungültig, wird Eingabe wiederholt
@@ -297,9 +301,6 @@ public class Ablauf {
                         System.out.println("Bitte nochmal eingeben. Das Wort darf nur Buchstaben enthalten");  //Wenn Wort nicht nur Buchstaben enthält, wird Eingabe wiederholt
                     }
                 }
-            } else {
-                System.out.println("Nur Option 1 oder 2 sind gueltige Eingaben!");
-                raten();
             }
 
             String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/neuesWort/" + option, "{ 'name': '" + Main.name + "','pool': '" + Main.poolID + "','zeichen': '" + eingabe + "'}");  //neuen Postrequest mit Eingabe an Server
