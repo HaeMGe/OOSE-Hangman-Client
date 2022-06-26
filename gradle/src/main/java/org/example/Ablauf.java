@@ -11,8 +11,12 @@ import java.util.concurrent.TimeUnit;
 public class Ablauf {
     static Scanner sc = new Scanner(System.in);
 
-
-public static void start() throws IOException, InterruptedException {
+    /**
+     * Startet die Client-Anwendung und erfragt den Nutzernamen des Users.
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public static void start() throws IOException, InterruptedException {
     System.out.println("Name: ");   //sich mit Name einloggen/sich einen Spielernamen geben
     Main.name = sc.next();
     String antwortServer = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/neuerNutzer", "{ 'name': '"+ Main.name+"'}"); //Namen für Nutzerliste an Server schicken
@@ -38,12 +42,16 @@ public static void start() throws IOException, InterruptedException {
     */
 }
 
+    /**
+     * Hauptmenue für Nutzer, mit den Optionen: Pool beitreten, Pool anlegen und logout
+     * @throws IOException
+     * @throws InterruptedException
+     */
     private static void menue1() throws IOException, InterruptedException {
         System.out.println("Was möchten Sie tuen?");
         System.out.println("1: Spielpool beitreten");
         System.out.println("2: Spielpool anlegen");
         System.out.println("3. Logout");
-        System.out.println("4. Pools, denen ich angehoere");
         int option = sc.nextInt();
     if(option == 1){
         poolBeitreten();
@@ -54,24 +62,23 @@ public static void start() throws IOException, InterruptedException {
     if(option == 3){
         logout();
     }
-    if(option == 4){
-        meinePools();
-    }
     }
 
-    //logout
+    /**
+     * User kann sich ausloggen und anschließend wieder mit neuem Namen anmelden
+     * @throws IOException
+     * @throws InterruptedException
+     */
     private static void logout() throws IOException, InterruptedException {
     Main.name = "";
         start();
     }
 
-    public static void meinePools() throws IOException, InterruptedException {
-        String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/meinePools/", "{ 'name': '"+ Main.name+ "'}");  //neuen Postrequest mit Eingabe an Server
-        System.out.println(antwort);
-        menue1();
-
-    }
-    //neuen Pool anlegen
+    /**
+     * Ein neuer Pool kann angelegt werden. Der anlegende Nutzer ist automatisch Mitglied im Pool und wartet auf einen Mitspieler.
+     * @throws IOException
+     * @throws InterruptedException
+     */
     private static void poolAnlegen() throws IOException, InterruptedException {
         System.out.println("Sie haben die Wahl, wechen Schwierigkeitsgrad der Pool haben soll: ");
         System.out.println("1: Anfänger");
@@ -95,6 +102,11 @@ public static void start() throws IOException, InterruptedException {
 
     }
 
+    /**
+     * Es kann einem bestehenden Pool beigetreten werden. Das Spiel beginnt dann sofort, da bereits der Anleger des Pools im Pool wartet.
+     * @throws IOException
+     * @throws InterruptedException
+     */
     private static void poolBeitreten() throws IOException, InterruptedException {
         String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/poolSuchen/", "pools angefragt");
         String[] antwortSplit = antwort.split("Vorhanden: ");
@@ -119,7 +131,7 @@ public static void start() throws IOException, InterruptedException {
             if(antwortServer.contains("true")){
                 System.out.println("Sie sind dem Pool erfolgreich beigetreten");
                 Main.poolID = wunschId;
-                poolWarteRaum();
+                poolWarteRaum();  //Nutzer kommt sofort in den Warteraum dieses Pools
             }
             else {
                 System.out.println("Leider gab es Probleme beim Beitreten. Sind Sie eventuell bereits Mitglied in diesem Pool?");
@@ -130,7 +142,7 @@ public static void start() throws IOException, InterruptedException {
     }
 
     /**
-     * Methode, in der der Client bleibt, bis ein Gegner seinem Pool beitritt (oder er irgendwann rausgeworfen wird??)
+     * Methode, in der der Client bleibt, bis ein Gegner seinem Pool beitritt (oder er irgendwann rausgeworfen wird, wenn ein bestimmtes Zeitlimit ueberschritten ist?)
      * @throws InterruptedException
      * @throws IOException
      */
@@ -147,6 +159,7 @@ public static void start() throws IOException, InterruptedException {
             sekunden = sekunden+1;
 
             String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/pool/warteRaum", "{ 'poolID':"+Main.poolID+" }");
+            System.out.println(antwort);
             antwort = antwort.replace("{", "");
             antwort = antwort.replace("}", "");
 
@@ -166,6 +179,11 @@ public static void start() throws IOException, InterruptedException {
 
     }
 
+    /**
+     * Hier wird der Hauptablauf des Spiels gesteuert und die Ergebnisse des Gegners immer wieder abgefragt bis das Spiel beendet ist.
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public static void spiel() throws IOException, InterruptedException {
         System.err.println("---Spiel gestartet---");
 
@@ -181,7 +199,7 @@ public static void start() throws IOException, InterruptedException {
         String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/spiel/anfang", "{ 'poolID':"+Main.poolID+",''name':'"+Main.name+"' }");
         System.out.println(antwort);
 
-        if (antwort.contains("true")) {
+        if (antwort.contains("true")) {  //dieser Nutzer ist dran mit Raten
             amZug = true;
         }
 
@@ -194,11 +212,11 @@ public static void start() throws IOException, InterruptedException {
                 System.out.println("Fehlversuche: "+fehlversuche);
                 System.out.println("Erratene Stellen: "+erraten);
                 raten();
-                amZug = false;
+                amZug = false;  //nach Rateversuch ist Gegner dran
             }else{
 
                 antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/spiel/status", "{ 'poolID':'"+Main.poolID+"','name':'"+Main.name+"' }");
-
+                System.out.println(antwort);
                 JsonObject jObj = new Gson().fromJson(antwort, JsonObject.class);
                 String amZugString = jObj.get("amZug").toString();
                 amZugString = amZugString.replace("\"", "");
@@ -233,6 +251,10 @@ public static void start() throws IOException, InterruptedException {
     }
 
 
+    /**
+     * Der Nutzer macht einen Rateversuch. Er hat die Auswahl zwischen Wort und Buchstabe erraten.
+     * @throws IOException
+     */
     public static void raten() throws IOException {
         String eingabe = null;
         System.out.println("Bitte geben Sie die 0 ein, wenn Sie einen Buchstaben erraten möchten und eine 1, wenn Sie schon ein ganzes Wort probieren wollen.");
@@ -240,7 +262,7 @@ public static void start() throws IOException, InterruptedException {
 
         if (option == 0) {
             boolean x = true;
-            while (x == true) {  // Falls Eingabe ungültig, wird Eingabe wiederholt
+            while (x) {  // Falls Eingabe ungültig, wird Eingabe wiederholt
                 System.out.println("Welchen Buchstaben wollen Sie ausprobieren?");
                 eingabe = sc.next();
                 char C = eingabe.charAt(0);
