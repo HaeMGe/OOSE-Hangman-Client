@@ -178,7 +178,7 @@ public static void start() throws IOException, InterruptedException {
         String fehlversuche = "";
 
         //Anfrage, wer der Clients anfangen darf zu raten
-        String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/spiel/anfang", "{ 'poolID':"+Main.poolID+",''name':'"+Main.name+"' }");
+        String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/spiel/anfang", "{ 'poolID':'"+Main.poolID+"','name':'"+Main.name+"' }");
         System.out.println(antwort);
 
         if (antwort.contains("true")) {
