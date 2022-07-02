@@ -165,11 +165,13 @@ public class Ablauf {
 
         System.out.println("---Warte auf zweiten Spieler---");
         //Prüft jede Sekunde, ob ein Gegner dem Pool beigetreten ist, und das Spiel begonnen hat
-        while(!spielGestartet){
+        int warteDauer = 10;
+        while (!spielGestartet && warteDauer != 0) {
+            warteDauer--;
             TimeUnit.SECONDS.sleep(1);
-            sekunden = sekunden+1;
+            sekunden = sekunden + 1;
 
-            String antwort = Main.posten.doPostRequest(Main.link+"games/hangman/start/pool/warteRaum", "{ 'poolID':"+Main.poolID+" }");
+            String antwort = Main.posten.doPostRequest(Main.link + "games/hangman/start/pool/warteRaum", "{ 'poolID':" + Main.poolID + " }");
             System.out.println(antwort);
             antwort = antwort.replace("{", "");
             antwort = antwort.replace("}", "");
@@ -178,15 +180,20 @@ public class Ablauf {
             spielGestartet = Boolean.parseBoolean(antwort);
 
             //Kleine Warteanimation :D
-            text = text+"*";
-            System.out.print(text+" \r");
-            if(sekunden%15==0){
-                text =  "";
+            text = text + "*";
+            System.out.print(text + " \r");
+            if (sekunden % 15 == 0) {
+                text = "";
             }
         }
 
-        //hier wurde das Spiel gestartet
+        if (warteDauer == 0) {
+            System.out.println("Leider niemand da.");
+            menue1();
+        } else
+            //hier wurde das Spiel gestartet
             spiel();
+
 
     }
 
