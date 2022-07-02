@@ -22,7 +22,7 @@ public class Ablauf {
             Main.name = sc.next();
 
 
-            String antwortServer = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/neuerNutzer", "{ 'name': '" + Main.name + "'}"); //Namen für Nutzerliste an Server schicken
+            String antwortServer = Main.posten.doPostRequest(Main.link+"games/hangman/start/neuerNutzer", "{ 'name': '" + Main.name + "'}"); //Namen für Nutzerliste an Server schicken
             if (antwortServer.contains("true")) {
                 System.out.println("Anmeldung erfolgreich. Viel Spass beim Spielen!");
                 menue1();
@@ -95,7 +95,7 @@ public class Ablauf {
         System.out.println("Was soll die Pool-ID sein?");
             int id = sc.nextInt();
 
-            String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/neuerPool/", "{ 'name': '" + Main.name + "','pool': '" + id + "','level': '" + level + "'}");  //neuen Postrequest mit Eingabe an Server
+            String antwort = Main.posten.doPostRequest(Main.link+"games/hangman/start/neuerPool/", "{ 'name': '" + Main.name + "','pool': '" + id + "','level': '" + level + "'}");  //neuen Postrequest mit Eingabe an Server
             boolean antwort2 = Boolean.parseBoolean(antwort);
 
             if (antwort2) {
@@ -115,7 +115,7 @@ public class Ablauf {
      * @throws InterruptedException
      */
     private static void poolBeitreten() throws InterruptedException, IOException {
-        String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/poolSuchen/", "pools angefragt");
+        String antwort = Main.posten.doPostRequest(Main.link+"games/hangman/start/poolSuchen/", "pools angefragt");
         String[] antwortSplit = antwort.split("Vorhanden: ");
         if(antwortSplit[1].contains("true"))  {
             System.out.println("Leider kein Spielpool vorhanden. Sie könnten selbst einen erstellen...");
@@ -135,7 +135,7 @@ public class Ablauf {
                 if (wunschId == -1) {  //zurück zu Menü
                     menue1();
                 } else {
-                    String antwortServer = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/beitreten/", "{ 'name': '" + Main.name + "','pool': '" + wunschId + "'}");  //neuen Postrequest mit Eingabe an S
+                    String antwortServer = Main.posten.doPostRequest(Main.link+"games/hangman/start/beitreten/", "{ 'name': '" + Main.name + "','pool': '" + wunschId + "'}");  //neuen Postrequest mit Eingabe an S
                     if (antwortServer.contains("true")) {
                         System.out.println("Sie sind dem Pool erfolgreich beigetreten");
                         Main.poolID = wunschId;
@@ -169,7 +169,7 @@ public class Ablauf {
             TimeUnit.SECONDS.sleep(1);
             sekunden = sekunden+1;
 
-            String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/pool/warteRaum", "{ 'poolID':"+Main.poolID+" }");
+            String antwort = Main.posten.doPostRequest(Main.link+"games/hangman/start/pool/warteRaum", "{ 'poolID':"+Main.poolID+" }");
             System.out.println(antwort);
             antwort = antwort.replace("{", "");
             antwort = antwort.replace("}", "");
@@ -207,7 +207,7 @@ public class Ablauf {
         String fehlversuche = "";
 
         //Anfrage, wer der Clients anfangen darf zu raten
-        String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/spiel/anfang", "{ 'poolID':'"+Main.poolID+"','name':'"+Main.name+"' }");
+        String antwort = Main.posten.doPostRequest(Main.link+"games/hangman/start/spiel/anfang", "{ 'poolID':'"+Main.poolID+"','name':'"+Main.name+"' }");
         System.out.println(antwort);
 
         if (antwort.contains("true")) {  //dieser Nutzer ist dran mit Raten
@@ -226,7 +226,7 @@ public class Ablauf {
                 amZug = false;  //nach Rateversuch ist Gegner dran
             }else{
 
-                antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/spiel/status", "{ 'poolID':'"+Main.poolID+"','name':'"+Main.name+"' }");
+                antwort = Main.posten.doPostRequest(Main.link+"games/hangman/start/spiel/status", "{ 'poolID':'"+Main.poolID+"','name':'"+Main.name+"' }");
                 JsonObject jObj = new Gson().fromJson(antwort, JsonObject.class);
                 String amZugString = jObj.get("amZug").toString();
                 amZugString = amZugString.replace("\"", "");
@@ -301,7 +301,7 @@ public class Ablauf {
                 }
             }
 
-            String antwort = Main.posten.doPostRequest("http://localhost:4567/games/hangman/start/neuesWort/" + option, "{ 'name': '" + Main.name + "','pool': '" + Main.poolID + "','zeichen': '" + eingabe + "'}");  //neuen Postrequest mit Eingabe an Server
+            String antwort = Main.posten.doPostRequest(Main.link+"games/hangman/start/neuesWort/" + option, "{ 'name': '" + Main.name + "','pool': '" + Main.poolID + "','zeichen': '" + eingabe + "'}");  //neuen Postrequest mit Eingabe an Server
             antwort = antwort.replace("{", "");
             antwort = antwort.replace("}", "");
             boolean antwort2 = Boolean.parseBoolean(antwort);
