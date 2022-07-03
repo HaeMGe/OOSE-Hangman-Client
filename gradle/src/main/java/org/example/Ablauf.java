@@ -195,7 +195,7 @@ public class Ablauf {
         } else {
             //hier wurde das Spiel gestartet
             //der Pool muss nun im Server geloescht werden
-            Main.posten.doPostRequest(Main.link + "games/hangman/start/spiel/loeschen", "{ 'poolID':'" + Main.poolID  + "' }");
+           // Main.posten.doPostRequest(Main.link + "games/hangman/start/spiel/loeschen", "{ 'poolID':'" + Main.poolID  + "' }");
             spiel();
         }
 
@@ -275,6 +275,9 @@ public class Ablauf {
                 }
             }
         }
+        //der Pool muss nun im Server geloescht werden
+        Main.posten.doPostRequest(Main.link + "games/hangman/start/spiel/loeschen", "{ 'poolID':'" + Main.poolID  + "' }");
+
     }
 
 
