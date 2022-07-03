@@ -189,10 +189,15 @@ public class Ablauf {
 
         if (warteDauer == 0) {
             System.out.println("Leider niemand da.");
+            //der Pool muss noch vom Server geloescht werden
+            Main.posten.doPostRequest(Main.link + "games/hangman/start/spiel/loeschen", "{ 'poolID':'" + Main.poolID  + "' }");
             menue1();
-        } else
+        } else {
             //hier wurde das Spiel gestartet
+            //der Pool muss nun im Server geloescht werden
+            Main.posten.doPostRequest(Main.link + "games/hangman/start/spiel/loeschen", "{ 'poolID':'" + Main.poolID  + "' }");
             spiel();
+        }
 
 
     }
@@ -205,16 +210,20 @@ public class Ablauf {
     public static void spiel() throws IOException, InterruptedException {
         System.err.println("---Spiel gestartet---");
 
+        String antwort = Main.posten.doPostRequest(Main.link+"games/hangman/start/spiel/status", "{ 'poolID':'"+Main.poolID+"','name':'"+Main.name+"' }");
+        JsonObject jObj = new Gson().fromJson(antwort, JsonObject.class);
+
         boolean spielEnde = false;
         boolean amZug = false;
         int anzahlLeben = 10;
         String text = "Warten auf Gegner ";
         int sekunden = 0;
-        String erraten = "";
+        String  erraten = jObj.get("erraten").toString();
+        erraten = erraten.replace("\"", "");
         String fehlversuche = "";
 
         //Anfrage, wer der Clients anfangen darf zu raten
-        String antwort = Main.posten.doPostRequest(Main.link+"games/hangman/start/spiel/anfang", "{ 'poolID':'"+Main.poolID+"','name':'"+Main.name+"' }");
+        antwort = Main.posten.doPostRequest(Main.link+"games/hangman/start/spiel/anfang", "{ 'poolID':'"+Main.poolID+"','name':'"+Main.name+"' }");
         System.out.println(antwort);
 
         if (antwort.contains("true")) {  //dieser Nutzer ist dran mit Raten
@@ -234,7 +243,7 @@ public class Ablauf {
             }else{
 
                 antwort = Main.posten.doPostRequest(Main.link+"games/hangman/start/spiel/status", "{ 'poolID':'"+Main.poolID+"','name':'"+Main.name+"' }");
-                JsonObject jObj = new Gson().fromJson(antwort, JsonObject.class);
+                new Gson().fromJson(antwort, JsonObject.class);
                 String amZugString = jObj.get("amZug").toString();
                 amZugString = amZugString.replace("\"", "");
 
@@ -252,6 +261,7 @@ public class Ablauf {
 
                 erraten = jObj.get("erraten").toString();
                 erraten = erraten.replace("\"", "");
+                System.out.println(erraten);
 
                 fehlversuche = jObj.get("fehlversuche").toString();
                 fehlversuche = fehlversuche.replace("\"", "");

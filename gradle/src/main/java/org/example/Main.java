@@ -13,14 +13,8 @@ public class Main {
 
 
     public static void main(String[] args) throws IOException, InterruptedException {
-
-        String antwort = posten.doPostRequest("http://localhost:4567/games/hangman/start", "Hallo vom Client!");
-
-        System.out.println(antwort);
+        System.out.println("Herzlich Willkommen in einer Welt voller Spiel, Spass und Spannung!");
         Ablauf.start();
-
-
-
     }
 
 }
