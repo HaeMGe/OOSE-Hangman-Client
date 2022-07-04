@@ -165,9 +165,9 @@ public class Ablauf {
 
         System.out.println("---Warte auf zweiten Spieler---");
         //Prüft jede Sekunde, ob ein Gegner dem Pool beigetreten ist, und das Spiel begonnen hat
-        int warteDauer = 10;
+        int warteDauer = 40;
         while (!spielGestartet && warteDauer != 0) {
-            //warteDauer--;
+            warteDauer--;
             TimeUnit.SECONDS.sleep(1);
             sekunden = sekunden + 1;
 
@@ -188,7 +188,7 @@ public class Ablauf {
         }
 
         if (warteDauer == 0) {
-            System.out.println("Leider niemand da.");
+            System.out.println("Leider niemand da. :(");
             //der Pool muss noch vom Server geloescht werden
             Main.posten.doPostRequest(Main.link + "games/hangman/start/spiel/loeschen", "{ 'poolID':'" + Main.poolID  + "' }");
             menue1();
