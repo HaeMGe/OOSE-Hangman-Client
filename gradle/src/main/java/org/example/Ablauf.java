@@ -244,8 +244,6 @@ public class Ablauf {
 
                 antwort = Main.posten.doPostRequest(Main.link+"games/hangman/start/spiel/status", "{ 'poolID':'"+Main.poolID+"','name':'"+Main.name+"' }");
 
-                System.err.println(antwort);
-
                 jObj = new  Gson().fromJson(antwort, JsonObject.class);
                 String amZugString = jObj.get("amZug").toString();
                 amZugString = amZugString.replace("\"", "");
