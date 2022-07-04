@@ -167,7 +167,7 @@ public class Ablauf {
         //Prüft jede Sekunde, ob ein Gegner dem Pool beigetreten ist, und das Spiel begonnen hat
         int warteDauer = 10;
         while (!spielGestartet && warteDauer != 0) {
-            warteDauer--;
+            //warteDauer--;
             TimeUnit.SECONDS.sleep(1);
             sekunden = sekunden + 1;
 
@@ -243,11 +243,18 @@ public class Ablauf {
             }else{
 
                 antwort = Main.posten.doPostRequest(Main.link+"games/hangman/start/spiel/status", "{ 'poolID':'"+Main.poolID+"','name':'"+Main.name+"' }");
-                new Gson().fromJson(antwort, JsonObject.class);
+
+                System.err.println(antwort);
+
+                jObj = new  Gson().fromJson(antwort, JsonObject.class);
                 String amZugString = jObj.get("amZug").toString();
                 amZugString = amZugString.replace("\"", "");
 
-                amZug = Boolean.parseBoolean(amZugString);
+                if(amZugString.contains("true")){
+                    amZug = true;
+                }else{
+                    amZug = false;
+                }
 
                 String leben = jObj.get("leben").toString();
                 leben = leben.replace("\"", "");
