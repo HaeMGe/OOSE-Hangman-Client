@@ -10,6 +10,7 @@ public class Main {
     static OkHttpClient client = new OkHttpClient();  //verwendeter Client
     static PostClass posten = new PostClass();
     static String link = "http://localhost:4567/";
+    //http://tuhintest.ddns.net:5741/
 
 
     public static void main(String[] args) throws IOException, InterruptedException {
