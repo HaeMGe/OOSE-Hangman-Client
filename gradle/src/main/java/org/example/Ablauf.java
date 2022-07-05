@@ -327,6 +327,9 @@ public class Ablauf {
                     if (!x) {
                         System.out.println("Bitte nochmal eingeben. Das Wort darf nur Buchstaben enthalten");  //Wenn Wort nicht nur Buchstaben enthält, wird Eingabe wiederholt
                     }
+
+                    eingabe = eingabe.toLowerCase();
+
                 }
             }
 
