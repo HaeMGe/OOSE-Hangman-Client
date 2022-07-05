@@ -172,7 +172,7 @@ public class Ablauf {
             sekunden = sekunden + 1;
 
             String antwort = Main.posten.doPostRequest(Main.link + "games/hangman/start/pool/warteRaum", "{ 'poolID':" + Main.poolID + " }");
-            System.out.println(antwort);
+            //System.out.println(antwort);
             antwort = antwort.replace("{", "");
             antwort = antwort.replace("}", "");
 
@@ -266,7 +266,6 @@ public class Ablauf {
 
                 erraten = jObj.get("erraten").toString();
                 erraten = erraten.replace("\"", "");
-                System.out.println(erraten);
 
                 fehlversuche = jObj.get("fehlversuche").toString();
                 fehlversuche = fehlversuche.replace("\"", "");
