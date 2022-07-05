@@ -92,12 +92,14 @@ public class Ablauf {
                  System.out.println("Sie koenne nur Level 1 bis 4 waehlen!");
                  poolAnlegen();
             }
+          level = level-1;
         System.out.println("Was soll die Pool-ID sein?");
             int id = sc.nextInt();
 
             String antwort = Main.posten.doPostRequest(Main.link+"games/hangman/start/neuerPool/", "{ 'name': '" + Main.name + "','pool': '" + id + "','level': '" + level + "'}");  //neuen Postrequest mit Eingabe an Server
             boolean antwort2 = Boolean.parseBoolean(antwort);
 
+            System.out.println(antwort2);
             if (antwort2) {
                 System.out.println("Ein Pool wurde erfolgreich angelegt.");
                 Main.poolID = id;
