@@ -281,7 +281,7 @@ public class Ablauf {
             }
         }
         //der Pool muss nun im Server geloescht werden
-        Main.posten.doPostRequest(Main.link + "games/hangman/start/spiel/loeschen", "{ 'poolID':'" + Main.poolID  + "' }");
+        Main.posten.doPostRequest(Main.link + "games/hangman/start/spiel/loeschen", "{ 'poolID':'" + Main.poolID + "' }");
 
     }
 
@@ -305,10 +305,15 @@ public class Ablauf {
                     System.out.println("Welchen Buchstaben wollen Sie ausprobieren?");
                     eingabe = sc.next();
                     char C = eingabe.charAt(0);
-                    if (!((C >= 'a' && C <= 'z') || (C >= 'A' && C <= 'Z'))) {   //überprüft,ob Eingabe gültig ist
-                        System.out.println("Eingabe nicht korrekt. Bitte geben Sie einen Buchstaben ein!");
-                    } else {
+                    if(eingabe.length()==1) {
+                        if (!((C >= 'a' && C <= 'z') || (C >= 'A' && C <= 'Z'))) {   //überprüft,ob Eingabe gültig ist
+                            System.out.println("Eingabe nicht korrekt. Bitte geben Sie einen Buchstaben ein!");
+                        } else {
+                            x = false;
+                        }
+                    }else{
                         x = false;
+                        System.out.println("Eingabe zulang/zu kurz");
                     }
                 }
             }
