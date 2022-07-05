@@ -221,6 +221,7 @@ public class Ablauf {
         String  erraten = jObj.get("erraten").toString();
         erraten = erraten.replace("\"", "");
         String fehlversuche = "";
+        String fehlversucheWort = "";
 
         //Anfrage, wer der Clients anfangen darf zu raten
         antwort = Main.posten.doPostRequest(Main.link+"games/hangman/start/spiel/anfang", "{ 'poolID':'"+Main.poolID+"','name':'"+Main.name+"' }");
@@ -237,6 +238,7 @@ public class Ablauf {
             if(amZug){
                 System.out.println("Anzahl Leben: "+anzahlLeben);
                 System.out.println("Fehlversuche: "+fehlversuche);
+                System.out.println("Fehlversuche Wörter: "+fehlversucheWort);
                 System.out.println("Erratene Stellen: "+erraten);
                 raten();
                 amZug = false;  //nach Rateversuch ist Gegner dran
@@ -269,6 +271,9 @@ public class Ablauf {
 
                 fehlversuche = jObj.get("fehlversuche").toString();
                 fehlversuche = fehlversuche.replace("\"", "");
+
+                fehlversucheWort = jObj.get("fehlversucheWort").toString();
+                fehlversucheWort = fehlversucheWort.replace("\"", "");
 
 
 
@@ -337,10 +342,10 @@ public class Ablauf {
             antwort = antwort.replace("{", "");
             antwort = antwort.replace("}", "");
             boolean antwort2 = Boolean.parseBoolean(antwort);
-            System.out.println(antwort2);
+            //System.out.println(antwort2);
             if (antwort2) {
                 System.out.println("Richtig geraten!");
-            } else System.out.println("Leider falscher Buchstabe! :-(");
+            } else System.out.println("Leider falsch Geraten! :-(");
               }
         catch(IOException e){
             System.out.println("Ungueltige Eingabe");
