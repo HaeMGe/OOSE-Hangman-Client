@@ -8,14 +8,15 @@ public class Main {
     static String name;  //Name des eingeloggten Nutzers
     static int poolID;   // Pool-ID von Pool in dem Nutzer gerade ist
     static OkHttpClient client = new OkHttpClient();  //verwendeter Client
-    static PostClass posten = new PostClass();
-    static String link = "http://localhost:4567/";
+    static PostClass posten = new PostClass(); //Object, um die Anfragen an den Server zu schicken
+    static String link = "http://localhost:4567/";  //Link, welcher Server benutzt werden soll
     //http://tuhintest.ddns.net:5741/
 
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        System.out.println("Herzlich Willkommen in einer Welt voller Spiel, Spass und Spannung!");
-        Ablauf.start();
-    }
 
+        System.out.println("Herzlich Willkommen in einer Welt voller Spiel, Spass und Spannung! :D");
+        Ablauf.start();
+
+    }
 }

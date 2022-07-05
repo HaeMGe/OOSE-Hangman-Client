@@ -224,7 +224,7 @@ public class Ablauf {
 
         //Anfrage, wer der Clients anfangen darf zu raten
         antwort = Main.posten.doPostRequest(Main.link+"games/hangman/start/spiel/anfang", "{ 'poolID':'"+Main.poolID+"','name':'"+Main.name+"' }");
-        System.out.println(antwort);
+        //System.out.println(antwort);
 
         if (antwort.contains("true")) {  //dieser Nutzer ist dran mit Raten
             amZug = true;
@@ -345,7 +345,6 @@ public class Ablauf {
         catch(IOException e){
             System.out.println("Ungueltige Eingabe");
         }
-
-        }
     }
+}
 
