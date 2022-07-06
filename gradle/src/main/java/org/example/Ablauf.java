@@ -184,9 +184,29 @@ public class Ablauf {
                 System.out.println(liste[i]);
             }
 
-            try {
                 System.out.println("Geben Sie die ID Ihres Wunschpools ein oder die -1 für das Hauptmenü");
-                int wunschId = sc.nextInt();
+
+                boolean loop = true;
+                int wunschId = -2;
+                String eingabe = "";
+
+                while(loop){
+
+                    eingabe = sc.nextLine();
+                    try {
+                        wunschId = Integer.parseInt(eingabe);
+                    }catch(NumberFormatException n){
+                        System.out.println("Fehler, nur Zahlen eingeben");
+                    }
+                    if(wunschId>=-1){
+                        loop = false;
+                    }else{
+                        System.out.println("Fehler, keine passende Zahl");
+                    }
+
+                }
+
+
                 if (wunschId == -1) {  //zurück zu Menü
                     menue1();
                 } else {
@@ -200,10 +220,6 @@ public class Ablauf {
                         menue1();
                     }
                 }
-            }
-            catch (IOException | InputMismatchException i){
-                System.out.println("Eine Pool-ID besteht nur aus Zahlen!");
-            }
         }
     }
 
@@ -320,11 +336,6 @@ public class Ablauf {
                     amZug = false;
                 }
 
-                String poolVorhanden = jObj.get("poolVorhanden").toString();
-                poolVorhanden = poolVorhanden.replace("\"", "");
-
-                poolVorhandenB = Boolean.parseBoolean(poolVorhanden);
-
                 String leben = jObj.get("leben").toString();
                 leben = leben.replace("\"", "");
 
@@ -354,10 +365,6 @@ public class Ablauf {
             }
         }
 
-        if(!poolVorhandenB){
-            System.err.println("Fehler im Pool");
-        }
-
         //Anfrage, ob der Client gewonnen hat oder nicht
         antwort  = Main.posten.doPostRequest(Main.link+"games/hangman/start/spiel/gewonnen","{ 'poolID':'" + Main.poolID + "','name':'"+Main.name+"' }");
         System.out.println(antwort);
@@ -373,16 +380,29 @@ public class Ablauf {
     /**
      * Der Nutzer macht einen Rateversuch. Er hat die Auswahl zwischen Wort und Buchstabe erraten.
      */
-    public static void raten(){
+    public static void raten() throws IOException {
         String eingabe = null;
         System.out.println("Bitte geben Sie die 0 ein, wenn Sie einen Buchstaben erraten möchten und eine 1, wenn Sie schon ein ganzes Wort probieren wollen.");
-        try {
-            int option = sc.nextInt();
 
-            if (option > 1 || option < 0) {
-                System.out.println("Nur Option 1 oder 2 sind gueltige Eingaben!");
-                raten();
+            boolean loop = true;
+            int option = -1;
+
+            while(loop){
+
+                eingabe = sc.nextLine();
+                try {
+                    option = Integer.parseInt(eingabe);
+                }catch(NumberFormatException n){
+                    System.out.println("Fehler, nur Zahlen eingeben");
+                }
+                if(!(option > 1 || option < 0)){
+                    loop = false;
+                }else{
+                    System.out.println("Fehler, keine passende Zahl");
+                }
+
             }
+
             if (option == 0) {
                 boolean x = true;
                 while (x) {  // Falls Eingabe ungültig, wird Eingabe wiederholt
@@ -422,27 +442,17 @@ public class Ablauf {
 
             JsonObject jObj = new Gson().fromJson(antwort, JsonObject.class);
 
-            String poolVorhanden = jObj.get("poolVorhanden").toString();
-            poolVorhanden = poolVorhanden.replace("\"", "");
-
-            boolean poolVorhandenB = Boolean.parseBoolean(poolVorhanden);
 
             String rateVersuch = jObj.get("rateVersuch").toString();
             rateVersuch = rateVersuch.replace("\"", "");
 
             boolean antwort2 = Boolean.parseBoolean(rateVersuch);
             //System.out.println(antwort2);
-            if (!poolVorhandenB) {
-                System.err.println("Fehler beim Pool");
-            } else {
+
                 if (antwort2) {
                     System.out.println("Richtig geraten!");
                 } else System.out.println("Leider falsch Geraten! :-(");
-            }
-        }
-        catch(IOException e){
-            System.out.println("Ungueltige Eingabe");
-        }
+
     }
 }
 
