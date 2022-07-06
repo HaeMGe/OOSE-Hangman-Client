@@ -369,9 +369,8 @@ public class Ablauf {
         }
 
         //Anfrage, ob der Client gewonnen hat oder nicht
-        antwort  = Main.posten.doPostRequest(Main.link+"games/hangman/start/spiel/gewonnen","{ 'poolID':'" + Main.poolID + "','name':'"+Main.name+"' }");
-        System.out.println(antwort);
-        //TODO: zuende machen
+        //antwort  = Main.posten.doPostRequest(Main.link+"games/hangman/start/spiel/gewonnen","{ 'poolID':'" + Main.poolID + "','name':'"+Main.name+"' }");
+        //System.out.println(antwort);
 
 
         //der Pool muss nun im Server geloescht werden
