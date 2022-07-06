@@ -233,6 +233,7 @@ public class Ablauf {
         boolean spielGestartet = false;
         int sekunden = 0;
         String text = "";
+        Main.poolErstellt = true;
 
         System.out.println("---Warte auf zweiten Spieler---");
         //Prüft jede Sekunde, ob ein Gegner dem Pool beigetreten ist, und das Spiel begonnen hat
@@ -372,7 +373,12 @@ public class Ablauf {
 
 
         //der Pool muss nun im Server geloescht werden
-        Main.posten.doPostRequest(Main.link + "games/hangman/start/spiel/loeschen", "{ 'poolID':'" + Main.poolID + "' }");
+        //Nur der ersteller des Pools löscht, damit sich das nicht doppelt
+        if(Main.poolErstellt) {
+            Main.posten.doPostRequest(Main.link + "games/hangman/start/spiel/loeschen", "{ 'poolID':'" + Main.poolID + "' }");
+            Main.poolErstellt = false;
+        }
+        menue1();
 
     }
 

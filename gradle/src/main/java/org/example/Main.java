@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
+    static boolean poolErstellt = false;
     static String name;  //Name des eingeloggten Nutzers
     static int poolID;   // Pool-ID von Pool in dem Nutzer gerade ist
     static OkHttpClient client = new OkHttpClient();  //verwendeter Client
