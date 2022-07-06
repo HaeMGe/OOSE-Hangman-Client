@@ -42,28 +42,40 @@ public class Ablauf {
      * Hauptmenue für Nutzer, mit den Optionen: Pool beitreten, Pool anlegen und logout
      * @throws InterruptedException
      */
-    private static void menue1() throws InterruptedException {
+    private static void menue1() throws InterruptedException, IOException {
+        boolean loop = true;
+        String option;
+        int count = 0;
+
         System.out.println("Was möchten Sie tuen?");
         System.out.println("1: Spielpool beitreten");
         System.out.println("2: Spielpool anlegen");
         System.out.println("3. Logout");
-        try {
-            int option = sc.nextInt();
-            if (option == 1) {
-                poolBeitreten();
-            }
-            if (option == 2) {
-                poolAnlegen();
-            }
-            if (option == 3) {
-                logout();
-            }
-            if(option > 3 || option <= 0){
-                System.out.println("Sie koennen nur zwischen 1, 2 und 3 waehlen!");
-                menue1();
-            }
-        } catch (InputMismatchException | IOException i) {
-            System.out.println("Ooops, ungueltige Eingabe.");
+
+        while(loop) {
+
+
+                option = sc.nextLine();
+
+                switch(option) {
+                    case"1":
+                        count++;
+                        loop = false;
+                        poolBeitreten();
+                    case"2":
+                        count++;
+                        loop = false;
+                        poolAnlegen();
+                    case"3":
+                        count++;
+                        loop = false;
+                        logout();
+                    default:
+                        if(count != 0) {
+                            System.out.println("Ooops, ungueltige Eingabe.");
+                        }
+                        count++;
+                }
         }
     }
 
@@ -80,21 +92,65 @@ public class Ablauf {
      * Ein neuer Pool kann angelegt werden. Der anlegende Nutzer ist automatisch Mitglied im Pool und wartet auf einen Mitspieler.
      * @throws InterruptedException
      */
-    private static void poolAnlegen() throws InterruptedException {
+    private static void poolAnlegen() throws InterruptedException, IOException {
+
+        boolean loop = true;
+        String eingabe = "";
+
         System.out.println("Sie haben die Wahl, wechen Schwierigkeitsgrad der Pool haben soll: ");
         System.out.println("1: Anfänger");
         System.out.println("2: Clevere");
         System.out.println("3: Profis");
         System.out.println("4: Absolute Überflieger");
-        try {
-        int level = sc.nextInt();
-          if(!(1<=level && level <= 4)){   //gueltiges Level eingegeben?
-                 System.out.println("Sie koenne nur Level 1 bis 4 waehlen!");
-                 poolAnlegen();
+
+
+        while(loop) {
+
+
+            eingabe = sc.nextLine();
+
+            switch (eingabe) {
+                case "1":
+                    loop = false;
+                case "2":
+                    loop = false;
+                case "3":
+                    loop = false;
+                case "4":
+                    loop = false;
+                default:
+                    if (loop) {
+                        System.out.println("Ooops, ungueltige Eingabe.");
+                    }
             }
+        }
+
+         int level = Integer.parseInt(eingabe);
           level = level-1;
+
+
         System.out.println("Was soll die Pool-ID sein?");
-            int id = sc.nextInt();
+
+        loop = true;
+        int id = -1;
+
+        while(loop){
+
+            eingabe = sc.nextLine();
+            try {
+                id = Integer.parseInt(eingabe);
+            }catch(NumberFormatException n){
+                System.out.println("Fehler, nur Zahlen eingeben");
+            }
+            if(id>=0){
+                loop = false;
+            }else{
+                System.out.println("Fehler, keine natürliche Zahl");
+            }
+
+        }
+
+
 
             String antwort = Main.posten.doPostRequest(Main.link+"games/hangman/start/neuerPool/", "{ 'name': '" + Main.name + "','pool': '" + id + "','level': '" + level + "'}");  //neuen Postrequest mit Eingabe an Server
             boolean antwort2 = Boolean.parseBoolean(antwort);
@@ -107,10 +163,7 @@ public class Ablauf {
             } else System.out.println("Leider ist ein Fehler passiert. Probieren Sie eventuell eine andere ID aus.");
             menue1();
         }
-        catch (InputMismatchException | IOException m){
-            System.out.println("Ooops, falsche Eingabe.");
-        }
-    }
+
 
     /**
      * Es kann einem bestehenden Pool beigetreten werden. Das Spiel beginnt dann sofort, da bereits der Anleger des Pools im Pool wartet.
