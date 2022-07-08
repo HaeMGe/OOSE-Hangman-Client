@@ -12,7 +12,7 @@ public class Main {
     static PostClass posten = new PostClass(); //Object, um die Anfragen an den Server zu schicken
     static String link = "http://localhost:4567/";  //Link, welcher Server benutzt werden soll
     //http://tuhintest.ddns.net:5741/
-
+    //http://localhost:4567/
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
