@@ -238,7 +238,7 @@ public class Ablauf {
 
         System.out.println("---Warte auf zweiten Spieler---");
         //Prüft jede Sekunde, ob ein Gegner dem Pool beigetreten ist, und das Spiel begonnen hat
-        int warteDauer = 40;
+        int warteDauer = 60;
         while (!spielGestartet && warteDauer != 0) {
             warteDauer--;
             TimeUnit.SECONDS.sleep(1);
