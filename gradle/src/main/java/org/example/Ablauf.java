@@ -104,6 +104,7 @@ public class Ablauf {
         System.out.println("3: Profis");
         System.out.println("4: Absolute Überflieger");
 
+        int count = 0;
 
         while(loop) {
 
@@ -119,9 +120,10 @@ public class Ablauf {
                 case "4":
                     loop = false;
                 default:
-                    if (loop) {
+                    if (loop && count!=0) {
                         System.out.println("Ooops, ungueltige Eingabe.");
                     }
+                    count++;
 
         }
         }
@@ -134,6 +136,7 @@ public class Ablauf {
 
         loop = true;
         int id = -1;
+        count = 0;
 
         while(loop){
 
@@ -141,13 +144,18 @@ public class Ablauf {
             try {
                 id = Integer.parseInt(eingabe);
             }catch(NumberFormatException n){
-                System.out.println("Fehler, nur Zahlen eingeben");
+                if(count !=0) {
+                    System.out.println("Fehler, nur Zahlen eingeben");
+                }
             }
             if(id>=0){
                 loop = false;
             }else{
-                System.out.println("Fehler, keine natürliche Zahl");
+                if(count != 0) {
+                    System.out.println("Fehler, keine natürliche Zahl");
+                }
             }
+            count++;
 
         }
 
@@ -190,6 +198,7 @@ public class Ablauf {
                 boolean loop = true;
                 int wunschId = -2;
                 String eingabe = "";
+                int count = 0;
 
                 while(loop){
 
@@ -197,13 +206,18 @@ public class Ablauf {
                     try {
                         wunschId = Integer.parseInt(eingabe);
                     }catch(NumberFormatException n){
-                        System.out.println("Fehler, nur Zahlen eingeben");
+                        if(count != 0) {
+                            System.out.println("Fehler, nur Zahlen eingeben");
+                        }
                     }
                     if(wunschId>=-1){
                         loop = false;
                     }else{
-                        System.out.println("Fehler, keine passende Zahl");
+                        if(count != 0) {
+                            System.out.println("Fehler, keine passende Zahl");
+                        }
                     }
+                    count++;
 
                 }
 
@@ -385,6 +399,7 @@ public class Ablauf {
 
             boolean loop = true;
             int option = -1;
+            int count = 0;
 
             while(loop){
 
@@ -393,18 +408,24 @@ public class Ablauf {
                 try {
                     option = Integer.parseInt(eingabe);
                 }catch(NumberFormatException n){
-                    System.out.println("Fehler, nur Zahlen eingeben");
+                    if(count != 0) {
+                        System.out.println("Fehler, nur Zahlen eingeben");
+                    }
                 }
                 if(!(option > 1 || option < 0)){
                     loop = false;
                 }else{
-                    System.out.println("Fehler, keine passende Zahl");
+                    if(count != 0) {
+                        System.out.println("Fehler, keine passende Zahl");
+                    }
                 }
+                count++;
 
             }
 
             if (option == 0) {
                 boolean x = true;
+
                 while (x) {  // Falls Eingabe ungültig, wird Eingabe wiederholt
                     System.out.println("Welchen Buchstaben wollen Sie ausprobieren?");
                     eingabe = sc.next();
