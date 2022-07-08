@@ -55,27 +55,19 @@ public class Ablauf {
 
         while(loop) {
 
-
                 option = sc.nextLine();
 
-                switch(option) {
-                    case"1":
-                        count++;
-                        loop = false;
-                        poolBeitreten();
-                    case"2":
-                        count++;
-                        loop = false;
-                        poolAnlegen();
-                    case"3":
-                        count++;
-                        loop = false;
-                        logout();
-                    default:
-                        if(count != 0) {
-                            System.out.println("Ooops, ungueltige Eingabe.");
-                        }
-                        count++;
+                if(option.equals("1")){
+                    loop = false;
+                    poolBeitreten();
+                } else if (option.equals("2")) {
+                    loop = false;
+                    poolAnlegen();
+                } else if (option.equals("3")) {
+                    loop = false;
+                    logout();
+                }else {
+                    System.out.println("Ooops, ungueltige Eingabe.");
                 }
         }
     }
@@ -107,22 +99,17 @@ public class Ablauf {
 
         while(loop) {
 
-
             eingabe = sc.nextLine();
 
-            switch (eingabe) {
-                case "1":
-                    loop = false;
-                case "2":
-                    loop = false;
-                case "3":
-                    loop = false;
-                case "4":
-                    loop = false;
-                default:
-                    if (loop) {
-                        System.out.println("Ooops, ungueltige Eingabe.");
-                    }
+
+            if(eingabe.equals("1")){
+                loop = false;
+            } else if (eingabe.equals("2")) {
+                loop = false;
+            } else if (eingabe.equals("3")) {
+                loop = false;
+            }else {
+                System.out.println("Ooops, ungueltige Eingabe.");
             }
         }
 
@@ -305,7 +292,7 @@ public class Ablauf {
             amZug = true;
         }
 
-        while(!spielEnde && poolVorhandenB) {
+        while(!spielEnde) {
             TimeUnit.SECONDS.sleep(1);
             sekunden = sekunden+1;
 
@@ -389,16 +376,17 @@ public class Ablauf {
             while(loop){
 
                 eingabe = sc.nextLine();
-                try {
-                    option = Integer.parseInt(eingabe);
-                }catch(NumberFormatException n){
-                    System.out.println("Fehler, nur Zahlen eingeben");
-                }
-                if(!(option > 1 || option < 0)){
+
+                if(eingabe.equals("0")){
                     loop = false;
+                    option = Integer.parseInt(eingabe);
+                } else if (eingabe.equals("1")) {
+                    loop = false;
+                    option = Integer.parseInt(eingabe);
                 }else{
-                    System.out.println("Fehler, keine passende Zahl");
+                    System.out.println("Falsche Eingabe");
                 }
+
 
             }
 
