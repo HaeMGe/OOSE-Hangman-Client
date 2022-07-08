@@ -53,22 +53,30 @@ public class Ablauf {
         System.out.println("2: Spielpool anlegen");
         System.out.println("3. Logout");
 
-        while(loop) {
+        while (loop) {
 
-                option = sc.nextLine();
+            option = sc.nextLine();
 
-                if(option.equals("1")){
+            switch (option) {
+                case "1":
+                    count++;
                     loop = false;
                     poolBeitreten();
-                } else if (option.equals("2")) {
+                case "2":
+                    count++;
                     loop = false;
                     poolAnlegen();
-                } else if (option.equals("3")) {
+                case "3":
+                    count++;
                     loop = false;
                     logout();
-                }else {
-                    System.out.println("Ooops, ungueltige Eingabe.");
-                }
+                default:
+                    if (count != 0) {
+                        System.out.println("Ooops, ungueltige Eingabe.");
+                    }
+                    count++;
+
+            }
         }
     }
 
@@ -101,16 +109,21 @@ public class Ablauf {
 
             eingabe = sc.nextLine();
 
+            switch (eingabe) {
+                case "1":
+                    loop = false;
+                case "2":
+                    loop = false;
+                case "3":
+                    loop = false;
+                case "4":
+                    loop = false;
+                default:
+                    if (loop) {
+                        System.out.println("Ooops, ungueltige Eingabe.");
+                    }
 
-            if(eingabe.equals("1")){
-                loop = false;
-            } else if (eingabe.equals("2")) {
-                loop = false;
-            } else if (eingabe.equals("3")) {
-                loop = false;
-            }else {
-                System.out.println("Ooops, ungueltige Eingabe.");
-            }
+        }
         }
 
          int level = Integer.parseInt(eingabe);
@@ -377,16 +390,16 @@ public class Ablauf {
 
                 eingabe = sc.nextLine();
 
-                if(eingabe.equals("0")){
-                    loop = false;
+                try {
                     option = Integer.parseInt(eingabe);
-                } else if (eingabe.equals("1")) {
-                    loop = false;
-                    option = Integer.parseInt(eingabe);
-                }else{
-                    System.out.println("Falsche Eingabe");
+                }catch(NumberFormatException n){
+                    System.out.println("Fehler, nur Zahlen eingeben");
                 }
-
+                if(!(option > 1 || option < 0)){
+                    loop = false;
+                }else{
+                    System.out.println("Fehler, keine passende Zahl");
+                }
 
             }
 
