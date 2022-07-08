@@ -23,6 +23,7 @@ public class Ablauf {
 
 
             String antwortServer = Main.posten.doPostRequest(Main.link+"games/hangman/start/neuerNutzer", "{ 'name': '" + Main.name + "'}"); //Namen für Nutzerliste an Server schicken
+            System.out.println( antwortServer);
             if (antwortServer.contains("true")) {
                 System.out.println("Anmeldung erfolgreich. Viel Spass beim Spielen!");
                 menue1();
@@ -304,13 +305,11 @@ public class Ablauf {
             amZug = true;
         }
 
-        int zeitlimit = 20;
         while(!spielEnde && poolVorhandenB) {
             TimeUnit.SECONDS.sleep(1);
             sekunden = sekunden+1;
 
             if(amZug){
-                zeitlimit = 20;
                 System.out.println("Anzahl Leben: "+anzahlLeben);
                 System.out.println("Fehlversuche: "+fehlversuche);
                 System.out.println("Fehlversuche Wörter: "+fehlversucheWort);
@@ -318,13 +317,6 @@ public class Ablauf {
                 raten();
                 amZug = false;  //nach Rateversuch ist Gegner dran
             }else{
-                zeitlimit--;
-                if(zeitlimit==0){
-                    System.out.println("Ihr Gegner hat wohl aufgegeben...");
-                    //der Pool muss nun im Server geloescht werden
-                    Main.posten.doPostRequest(Main.link + "games/hangman/start/spiel/loeschen", "{ 'poolID':'" + Main.poolID + "' }");
-                    menue1();
-                }
                 antwort = Main.posten.doPostRequest(Main.link+"games/hangman/start/spiel/status", "{ 'poolID':'"+Main.poolID+"','name':'"+Main.name+"' }");
 
                 //System.out.println(antwort);
