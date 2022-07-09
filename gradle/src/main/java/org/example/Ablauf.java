@@ -21,9 +21,9 @@ public class Ablauf {
             System.out.println("Name: ");   //sich mit Name einloggen/sich einen Spielernamen geben
             Main.name = sc.next();
 
-
             String antwortServer = Main.posten.doPostRequest(Main.link+"games/hangman/start/neuerNutzer", "{ 'name': '" + Main.name + "'}"); //Namen für Nutzerliste an Server schicken
-            System.out.println( antwortServer);
+            //System.out.println( antwortServer);
+
             if (antwortServer.contains("true")) {
                 System.out.println("Anmeldung erfolgreich. Viel Spass beim Spielen!");
                 menue1();
@@ -75,8 +75,8 @@ public class Ablauf {
                         System.out.println("Ooops, ungueltige Eingabe.");
                     }
                     count++;
-
             }
+
         }
     }
 
@@ -85,7 +85,7 @@ public class Ablauf {
      * @throws IOException
      */
     private static void logout() throws IOException {
-    Main.name = "";
+        Main.name = "";
         start();
     }
 
@@ -125,7 +125,7 @@ public class Ablauf {
                     }
                     count++;
 
-        }
+            }
         }
 
          int level = Integer.parseInt(eingabe);
@@ -163,8 +163,8 @@ public class Ablauf {
 
             String antwort = Main.posten.doPostRequest(Main.link+"games/hangman/start/neuerPool/", "{ 'name': '" + Main.name + "','pool': '" + id + "','level': '" + level + "'}");  //neuen Postrequest mit Eingabe an Server
             boolean antwort2 = Boolean.parseBoolean(antwort);
+            //System.out.println(antwort2);
 
-            System.out.println(antwort2);
             if (antwort2) {
                 System.out.println("Ein Pool wurde erfolgreich angelegt.");
                 Main.poolID = id;
@@ -181,6 +181,7 @@ public class Ablauf {
     private static void poolBeitreten() throws InterruptedException, IOException {
         String antwort = Main.posten.doPostRequest(Main.link+"games/hangman/start/poolSuchen/", "pools angefragt");
         String[] antwortSplit = antwort.split("Vorhanden: ");
+
         if(antwortSplit[1].contains("true"))  {
             System.out.println("Leider kein Spielpool vorhanden. Sie könnten selbst einen erstellen...");
             menue1();
@@ -226,6 +227,7 @@ public class Ablauf {
                     menue1();
                 } else {
                     String antwortServer = Main.posten.doPostRequest(Main.link+"games/hangman/start/beitreten/", "{ 'name': '" + Main.name + "','pool': '" + wunschId + "'}");  //neuen Postrequest mit Eingabe an S
+
                     if (antwortServer.contains("true")) {
                         System.out.println("Sie sind dem Pool erfolgreich beigetreten");
                         Main.poolID = wunschId;
