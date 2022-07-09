@@ -41,6 +41,9 @@ UML Diagram Client:
 Menue-Diagramm Client:
 ![gradle/AblaufMenues Client.png](gradle/AblaufMenues Client.png)
 
+API-Pfade
+![gradle/Bildschirmfoto 2022-07-07 um 13.34.13.png](gradle/Bildschirmfoto 2022-07-07 um 13.34.13.png)
+![gradle/Bildschirmfoto 2022-07-07 um 13.34.40.png](gradle/Bildschirmfoto 2022-07-07 um 13.34.40.png)
 Verwendete Features:
 Http-Client: okhttp3
 
