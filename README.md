@@ -35,6 +35,8 @@ und mitspielen
              - beide Spieler erraten das Wort nicht und haben keine Leben mehr
 
 
+![gradle/Screenshot 2022-07-09 153030.jpg](gradle/Screenshot 2022-07-09 153030.jpg)
+
 Verwendete Features:
 Http-Client: okhttp3
 
