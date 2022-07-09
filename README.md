@@ -38,6 +38,9 @@ und mitspielen
 UML Diagram Client:
 ![gradle/Screenshot 2022-07-09 153030.jpg](gradle/Screenshot 2022-07-09 153030.jpg)
 
+Menue-Diagramm Client:
+![gradle/AblaufMenues Client.png](gradle/AblaufMenues Client.png)
+
 Verwendete Features:
 Http-Client: okhttp3
 
