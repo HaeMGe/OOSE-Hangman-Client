@@ -53,6 +53,7 @@ public class Ablauf {
         System.out.println("2: Spielpool anlegen");
         System.out.println("3. Logout");
 
+        //Schleife mit switch-case, um falsche eingaben abzufangen
         while (loop) {
 
             option = sc.nextLine();
@@ -106,6 +107,7 @@ public class Ablauf {
 
         int count = 0;
 
+        //Schleife mit switch-case, um falsche eingaben abzufangen
         while(loop) {
 
             eingabe = sc.nextLine();
@@ -138,6 +140,7 @@ public class Ablauf {
         int id = -1;
         count = 0;
 
+        //Schleife mit trycatch, um falsche eingaben abzufangen
         while(loop){
 
             eingabe = sc.nextLine();
@@ -201,6 +204,7 @@ public class Ablauf {
                 String eingabe = "";
                 int count = 0;
 
+                //Schleife mit trycatch , um falsche eingaben abzufangen
                 while(loop){
 
                     eingabe = sc.nextLine();
@@ -321,11 +325,13 @@ public class Ablauf {
             amZug = true;
         }
 
+        //Schleife, wo entweder jede sekunde nach dem spielstand abgefragt wird, oder der spieler dran ist mit seiner eingabe
         while(!spielEnde) {
             TimeUnit.SECONDS.sleep(1);
             sekunden = sekunden+1;
 
             if(amZug){
+                //Falls Spieler dran ist mit raten
                 System.out.println("Anzahl Leben: "+anzahlLeben);
                 System.out.println("Fehlversuche: "+fehlversuche);
                 System.out.println("Fehlversuche Wörter: "+fehlversucheWort);
@@ -333,6 +339,8 @@ public class Ablauf {
                 raten();
                 amZug = false;  //nach Rateversuch ist Gegner dran
             }else{
+                //Statusabfragen, falls nicht dran, 1x die Sekunde
+
                 antwort = Main.posten.doPostRequest(Main.link+"games/hangman/start/spiel/status", "{ 'poolID':'"+Main.poolID+"','name':'"+Main.name+"' }");
 
                 //System.out.println(antwort);
@@ -367,7 +375,7 @@ public class Ablauf {
                 fehlversucheWort = fehlversucheWort.replace("\"", "");
 
 
-
+                //Wartetext
                 text = text+"*";
                 System.out.print(text+" \r");
                 if(sekunden%15==0){
@@ -403,6 +411,7 @@ public class Ablauf {
             int option = -1;
             int count = 0;
 
+            //Loop mit trycatch, um falsche Eingaben abzufangen
             while(loop){
 
                 eingabe = sc.nextLine();
